@@ -15,6 +15,17 @@
 		F2E5857915D3F04700198F57 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5857815D3F04700198F57 /* AppDelegate.m */; };
 		F2E5857C15D3F04700198F57 /* MainStoryboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2E5857A15D3F04700198F57 /* MainStoryboard.storyboard */; };
 		F2E5857F15D3F04700198F57 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5857E15D3F04700198F57 /* ViewController.m */; };
+		F2E5858E15D3F25700198F57 /* CoreDataTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5858A15D3F25700198F57 /* CoreDataTableViewController.m */; };
+		F2E5858F15D3F25700198F57 /* FlickrFetcher.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5858D15D3F25700198F57 /* FlickrFetcher.m */; };
+		F2E5859715D3F2A100198F57 /* ImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5859215D3F2A100198F57 /* ImageViewController.m */; };
+		F2E5859815D3F2A100198F57 /* PhotographersTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5859415D3F2A100198F57 /* PhotographersTableViewController.m */; };
+		F2E5859915D3F2A100198F57 /* PhotosByPhotographerTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E5859615D3F2A100198F57 /* PhotosByPhotographerTableViewController.m */; };
+		F2E5859C15D3F2D500198F57 /* Photomania.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F2E5859A15D3F2D500198F57 /* Photomania.xcdatamodeld */; };
+		F2E5859E15D3F2E600198F57 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2E5859D15D3F2E600198F57 /* CoreData.framework */; };
+		F2E585A115D3F3D500198F57 /* Photo.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E585A015D3F3D500198F57 /* Photo.m */; };
+		F2E585A415D3F3D500198F57 /* Photographer.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E585A315D3F3D500198F57 /* Photographer.m */; };
+		F2E585A915D3F43100198F57 /* Photo+Flickr.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E585A615D3F43100198F57 /* Photo+Flickr.m */; };
+		F2E585AA15D3F43100198F57 /* Photographer+Create.m in Sources */ = {isa = PBXBuildFile; fileRef = F2E585A815D3F43100198F57 /* Photographer+Create.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +42,27 @@
 		F2E5857B15D3F04700198F57 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = en; path = en.lproj/MainStoryboard.storyboard; sourceTree = "<group>"; };
 		F2E5857D15D3F04700198F57 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		F2E5857E15D3F04700198F57 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		F2E5858915D3F25700198F57 /* CoreDataTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CoreDataTableViewController.h; sourceTree = "<group>"; };
+		F2E5858A15D3F25700198F57 /* CoreDataTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CoreDataTableViewController.m; sourceTree = "<group>"; };
+		F2E5858B15D3F25700198F57 /* FlickrAPIKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrAPIKey.h; sourceTree = "<group>"; };
+		F2E5858C15D3F25700198F57 /* FlickrFetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FlickrFetcher.h; sourceTree = "<group>"; };
+		F2E5858D15D3F25700198F57 /* FlickrFetcher.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FlickrFetcher.m; sourceTree = "<group>"; };
+		F2E5859115D3F2A100198F57 /* ImageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageViewController.h; sourceTree = "<group>"; };
+		F2E5859215D3F2A100198F57 /* ImageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageViewController.m; sourceTree = "<group>"; };
+		F2E5859315D3F2A100198F57 /* PhotographersTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotographersTableViewController.h; sourceTree = "<group>"; };
+		F2E5859415D3F2A100198F57 /* PhotographersTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotographersTableViewController.m; sourceTree = "<group>"; };
+		F2E5859515D3F2A100198F57 /* PhotosByPhotographerTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotosByPhotographerTableViewController.h; sourceTree = "<group>"; };
+		F2E5859615D3F2A100198F57 /* PhotosByPhotographerTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotosByPhotographerTableViewController.m; sourceTree = "<group>"; };
+		F2E5859B15D3F2D500198F57 /* Photomania.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Photomania.xcdatamodel; sourceTree = "<group>"; };
+		F2E5859D15D3F2E600198F57 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		F2E5859F15D3F3D500198F57 /* Photo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photo.h; sourceTree = "<group>"; };
+		F2E585A015D3F3D500198F57 /* Photo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photo.m; sourceTree = "<group>"; };
+		F2E585A215D3F3D500198F57 /* Photographer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Photographer.h; sourceTree = "<group>"; };
+		F2E585A315D3F3D500198F57 /* Photographer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Photographer.m; sourceTree = "<group>"; };
+		F2E585A515D3F43100198F57 /* Photo+Flickr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Photo+Flickr.h"; sourceTree = "<group>"; };
+		F2E585A615D3F43100198F57 /* Photo+Flickr.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Photo+Flickr.m"; sourceTree = "<group>"; };
+		F2E585A715D3F43100198F57 /* Photographer+Create.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Photographer+Create.h"; sourceTree = "<group>"; };
+		F2E585A815D3F43100198F57 /* Photographer+Create.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "Photographer+Create.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +70,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2E5859E15D3F2E600198F57 /* CoreData.framework in Frameworks */,
 				F2E5856915D3F04700198F57 /* UIKit.framework in Frameworks */,
 				F2E5856B15D3F04700198F57 /* Foundation.framework in Frameworks */,
 				F2E5856D15D3F04700198F57 /* CoreGraphics.framework in Frameworks */,
@@ -50,6 +83,7 @@
 		F2E5855915D3F04700198F57 = {
 			isa = PBXGroup;
 			children = (
+				F2E5859D15D3F2E600198F57 /* CoreData.framework */,
 				F2E5856E15D3F04700198F57 /* Photomania */,
 				F2E5856715D3F04700198F57 /* Frameworks */,
 				F2E5856515D3F04700198F57 /* Products */,
@@ -80,6 +114,26 @@
 				F2E5857715D3F04700198F57 /* AppDelegate.h */,
 				F2E5857815D3F04700198F57 /* AppDelegate.m */,
 				F2E5857A15D3F04700198F57 /* MainStoryboard.storyboard */,
+				F2E585A515D3F43100198F57 /* Photo+Flickr.h */,
+				F2E585A615D3F43100198F57 /* Photo+Flickr.m */,
+				F2E585A715D3F43100198F57 /* Photographer+Create.h */,
+				F2E585A815D3F43100198F57 /* Photographer+Create.m */,
+				F2E5858915D3F25700198F57 /* CoreDataTableViewController.h */,
+				F2E5858A15D3F25700198F57 /* CoreDataTableViewController.m */,
+				F2E5858B15D3F25700198F57 /* FlickrAPIKey.h */,
+				F2E5858C15D3F25700198F57 /* FlickrFetcher.h */,
+				F2E5858D15D3F25700198F57 /* FlickrFetcher.m */,
+				F2E5859115D3F2A100198F57 /* ImageViewController.h */,
+				F2E5859215D3F2A100198F57 /* ImageViewController.m */,
+				F2E5859315D3F2A100198F57 /* PhotographersTableViewController.h */,
+				F2E5859415D3F2A100198F57 /* PhotographersTableViewController.m */,
+				F2E5859A15D3F2D500198F57 /* Photomania.xcdatamodeld */,
+				F2E585A215D3F3D500198F57 /* Photographer.h */,
+				F2E585A315D3F3D500198F57 /* Photographer.m */,
+				F2E5859F15D3F3D500198F57 /* Photo.h */,
+				F2E585A015D3F3D500198F57 /* Photo.m */,
+				F2E5859515D3F2A100198F57 /* PhotosByPhotographerTableViewController.h */,
+				F2E5859615D3F2A100198F57 /* PhotosByPhotographerTableViewController.m */,
 				F2E5857D15D3F04700198F57 /* ViewController.h */,
 				F2E5857E15D3F04700198F57 /* ViewController.m */,
 				F2E5856F15D3F04700198F57 /* Supporting Files */,
@@ -164,6 +218,16 @@
 				F2E5857515D3F04700198F57 /* main.m in Sources */,
 				F2E5857915D3F04700198F57 /* AppDelegate.m in Sources */,
 				F2E5857F15D3F04700198F57 /* ViewController.m in Sources */,
+				F2E5858E15D3F25700198F57 /* CoreDataTableViewController.m in Sources */,
+				F2E5858F15D3F25700198F57 /* FlickrFetcher.m in Sources */,
+				F2E5859715D3F2A100198F57 /* ImageViewController.m in Sources */,
+				F2E5859815D3F2A100198F57 /* PhotographersTableViewController.m in Sources */,
+				F2E5859915D3F2A100198F57 /* PhotosByPhotographerTableViewController.m in Sources */,
+				F2E5859C15D3F2D500198F57 /* Photomania.xcdatamodeld in Sources */,
+				F2E585A115D3F3D500198F57 /* Photo.m in Sources */,
+				F2E585A415D3F3D500198F57 /* Photographer.m in Sources */,
+				F2E585A915D3F43100198F57 /* Photo+Flickr.m in Sources */,
+				F2E585AA15D3F43100198F57 /* Photographer+Create.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,8 +343,22 @@
 				F2E5858415D3F04700198F57 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F2E5859A15D3F2D500198F57 /* Photomania.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F2E5859B15D3F2D500198F57 /* Photomania.xcdatamodel */,
+			);
+			currentVersion = F2E5859B15D3F2D500198F57 /* Photomania.xcdatamodel */;
+			path = Photomania.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F2E5855B15D3F04700198F57 /* Project object */;
 }
