@@ -95,6 +95,8 @@
 }
 #elif defined __THREAD_RACE_GAUDE_1845__
 // *** NOT WRKING ***
+// first (no file exists) -->OK
+// second (trap) --> NG
 - (void)useDocument
 {
     dispatch_queue_t syncQueue = dispatch_queue_create("sync thread call queue", NULL);
@@ -103,39 +105,42 @@
         // does not exist on disk, so create it
         [self.photoDatabase saveToURL:self.photoDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
-            [self fetchFlickrDataIntoDocument:self.photoDatabase];
-            
+            [self fetchFlickrDataIntoDocument:self.photoDatabase usingBlock:^(BOOL success){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationItem.rightBarButtonItem = nil;
+                });
+            }];
         }];
     } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
         NSLog(@"now opening ...");
 
-         dispatch_sync(syncQueue, ^{
-            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
-                 if (success) {
-                     dispatch_async(syncQueue, ^{
-                         [self setupFetchedResultsController];
-                     });
-                 } else {
-                     NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
-                 }
-             }];
-         });
+         // dispatch_sync(syncQueue, ^{
+         //    [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+         //         if (success) {
+         //             dispatch_async(syncQueue, ^{
+         //                 [self setupFetchedResultsController];
+         //             });
+         //         } else {
+         //             NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
+         //         }
+         //     }];
+         // });
 
         
-        // trap causes app to stop.
-        // dispatch_async(syncQueue, ^{
-        //    dispatch_suspend(syncQueue);
-        //     [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
-        //         if (success) {
-        //             dispatch_async(syncQueue, ^{
-        //                 [self setupFetchedResultsController];
-        //             });
-        //         } else {
-        //             NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
-        //         }
-        //         dispatch_resume(syncQueue);
-        //    }];
-        // });
+        dispatch_async(syncQueue, ^{
+           dispatch_suspend(syncQueue);
+            // trap causes app to stop.
+            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+                if (success) {
+                    // dispatch_async(syncQueue, ^{
+                        [self setupFetchedResultsController];
+                    // });
+                } else {
+                    NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
+                }
+                dispatch_resume(syncQueue);
+           }];
+        });
     } else if (self.photoDatabase.documentState == UIDocumentStateNormal) {
         // already open and ready to use
         [self setupFetchedResultsController];

@@ -17,6 +17,7 @@
 @dynamic title;
 @dynamic unique;
 @dynamic thumbnail;
+@dynamic thumbnailURL;
 @dynamic whoTook;
 
 @end

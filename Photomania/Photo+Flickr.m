@@ -42,6 +42,7 @@
 
         // NSData *imageData = UIImagePNGRepresentation(image);
         // UIImage *image=[UIImage imageWithData:data];
+        photo.thumbnailURL = [[FlickrFetcher urlForPhoto:flickrInfo format:FlickrPhotoFormatSquare] absoluteString];
         photo.thumbnail = UIImagePNGRepresentation([UIImage imageNamed:@"crimson.png"]);
         NSLog(@"Photo");
     } else {

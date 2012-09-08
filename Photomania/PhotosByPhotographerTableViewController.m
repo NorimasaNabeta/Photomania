@@ -29,6 +29,29 @@
                                                                         managedObjectContext:self.photographer.managedObjectContext
                                                                           sectionNameKeyPath:nil
                                                                                    cacheName:nil];
+
+    [self fetchThumbnail];
+}
+
+
+- (void) fetchThumbnail
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        int cnt = [[[self.fetchedResultsController sections] objectAtIndex:0] numberOfObjects];
+        for (int idx=0; idx<cnt; idx++) {
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:idx inSection:0];
+            Photo *photo = [self.fetchedResultsController objectAtIndexPath:indexPath];
+            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:photo.thumbnailURL]];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (data){
+                    photo.thumbnail = data;
+                } else {
+                    
+                }
+            });
+        }
+
+    });
 }
 
 // 16. Update our title and set up our NSFRC when our Model is set
