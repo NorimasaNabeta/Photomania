@@ -60,7 +60,87 @@
 }
 
 // 3. Open or create the document here and call setupFetchedResultsController
+//#define __THREAD_RACE_GAUDE_1840__
+#define __THREAD_RACE_GAUDE_1845__
+#ifdef __THREAD_RACE_GAUDE_1840__
+- (void)useDocument
+{
+    //dispatch_queue_t syncQueue = dispatch_queue_create("sync thread call queue", NULL);
+    static BOOL isOpening;
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self.photoDatabase.fileURL path]]) {
+        // does not exist on disk, so create it
+        [self.photoDatabase saveToURL:self.photoDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            [self setupFetchedResultsController];
+            [self fetchFlickrDataIntoDocument:self.photoDatabase];
+            
+        }];
+    } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
+        // @1840 Rob Woodgate's solution.
+        if (!isOpening) {
+            isOpening = YES;
+            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+                [self setupFetchedResultsController];
+                isOpening = NO;
+            }];
+        } else {
+            NSLog(@"Try again");
+            [self performSelector:@selector(useDocument) withObject:nil afterDelay:1.0];
+        }
+    } else if (self.photoDatabase.documentState == UIDocumentStateNormal) {
+        // already open and ready to use
+        [self setupFetchedResultsController];
+    }
+}
+#elif defined __THREAD_RACE_GAUDE_1845__
+- (void)useDocument
+{
+    dispatch_queue_t syncQueue = dispatch_queue_create("sync thread call queue", NULL);
+    
+    if (![[NSFileManager defaultManager] fileExistsAtPath:[self.photoDatabase.fileURL path]]) {
+        // does not exist on disk, so create it
+        [self.photoDatabase saveToURL:self.photoDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
+            [self setupFetchedResultsController];
+            [self fetchFlickrDataIntoDocument:self.photoDatabase];
+            
+        }];
+    } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
+        // dispatch_sync(syncQueue, ^{
+        //     [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+        //         if (success) {
+        //             dispatch_async(syncQueue, ^{
+        //                 [self setupFetchedResultsController];
+        //             });
+        //         } else {
+        //             NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
+        //         }
+        //     }];
+        // });
 
+        // the length of the critical section is not so shorten than dispatch_sync case?
+        dispatch_async(syncQueue, ^{
+            dispatch_suspend(syncQueue);
+            
+            // This means that opening the opened document causes no problem?
+            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+                if (success) {
+                    dispatch_async(syncQueue, ^{
+                        [self setupFetchedResultsController];
+                    });
+                } else {
+                    NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
+                }
+                dispatch_resume(syncQueue);
+            }];
+        });
+    } else if (self.photoDatabase.documentState == UIDocumentStateNormal) {
+        // already open and ready to use
+        [self setupFetchedResultsController];
+    }
+}
+
+#else //#ifdef __THREAD_RACE_GAUDE__
+// ORIGINAL
 - (void)useDocument
 {
     if (![[NSFileManager defaultManager] fileExistsAtPath:[self.photoDatabase.fileURL path]]) {
@@ -81,13 +161,19 @@
     }
 }
 
+#endif //#ifdef __THREAD_RACE_GAUDE__
+
 // 2. Make the photoDatabase's setter start using it
 
 - (void)setPhotoDatabase:(UIManagedDocument *)photoDatabase
 {
     if (_photoDatabase != photoDatabase) {
         _photoDatabase = photoDatabase;
+        
+        // @1840 Opening / passing UIManagedDocument
+        // race condition test
         [self useDocument];
+        // [self useDocument];
     }
 }
 
