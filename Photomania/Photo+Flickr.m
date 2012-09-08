@@ -39,6 +39,10 @@
         photo.subtitle = [flickrInfo valueForKeyPath:FLICKR_PHOTO_DESCRIPTION];
         photo.imageURL = [[FlickrFetcher urlForPhoto:flickrInfo format:FlickrPhotoFormatLarge] absoluteString];
         photo.whoTook = [Photographer photographerWithName:[flickrInfo objectForKey:FLICKR_PHOTO_OWNER] inManagedObjectContext:context];
+
+        // NSData *imageData = UIImagePNGRepresentation(image);
+        // UIImage *image=[UIImage imageWithData:data];
+        photo.thumbnail = UIImagePNGRepresentation([UIImage imageNamed:@"crimson.png"]);
         NSLog(@"Photo");
     } else {
         photo = [matches lastObject];

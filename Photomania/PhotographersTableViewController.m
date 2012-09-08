@@ -38,7 +38,7 @@
 // (go to Photo+Flickr for next step)
 // 12. Use the Photo+Flickr category method to add Photos to the database (table will auto update due to NSFRC)
 
-- (void)fetchFlickrDataIntoDocument:(UIManagedDocument *)document
+- (void)fetchFlickrDataIntoDocument:(UIManagedDocument *)document usingBlock:(void (^)(BOOL)) block
 {
     dispatch_queue_t fetchQ = dispatch_queue_create("Flickr fetcher", NULL);
     dispatch_async(fetchQ, ^{
@@ -54,14 +54,16 @@
             // this is what it would look like (ADDED AFTER LECTURE) ...
             [document saveToURL:document.fileURL forSaveOperation:UIDocumentSaveForOverwriting completionHandler:NULL];
             // note that we don't do anything in the completion handler this time
+            
         }];
+        block(YES);
     });
     dispatch_release(fetchQ);
 }
 
 // 3. Open or create the document here and call setupFetchedResultsController
-//#define __THREAD_RACE_GAUDE_1840__
-#define __THREAD_RACE_GAUDE_1845__
+// #define __THREAD_RACE_GAUDE_1840__
+// #define __THREAD_RACE_GAUDE_1845__
 #ifdef __THREAD_RACE_GAUDE_1840__
 - (void)useDocument
 {
@@ -73,7 +75,6 @@
         [self.photoDatabase saveToURL:self.photoDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
             [self fetchFlickrDataIntoDocument:self.photoDatabase];
-            
         }];
     } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
         // @1840 Rob Woodgate's solution.
@@ -93,6 +94,7 @@
     }
 }
 #elif defined __THREAD_RACE_GAUDE_1845__
+// *** NOT WRKING ***
 - (void)useDocument
 {
     dispatch_queue_t syncQueue = dispatch_queue_create("sync thread call queue", NULL);
@@ -105,7 +107,24 @@
             
         }];
     } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
-        // dispatch_sync(syncQueue, ^{
+        NSLog(@"now opening ...");
+
+         dispatch_sync(syncQueue, ^{
+            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
+                 if (success) {
+                     dispatch_async(syncQueue, ^{
+                         [self setupFetchedResultsController];
+                     });
+                 } else {
+                     NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
+                 }
+             }];
+         });
+
+        
+        // trap causes app to stop.
+        // dispatch_async(syncQueue, ^{
+        //    dispatch_suspend(syncQueue);
         //     [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
         //         if (success) {
         //             dispatch_async(syncQueue, ^{
@@ -114,29 +133,14 @@
         //         } else {
         //             NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
         //         }
-        //     }];
+        //         dispatch_resume(syncQueue);
+        //    }];
         // });
-
-        // the length of the critical section is not so shorten than dispatch_sync case?
-        dispatch_async(syncQueue, ^{
-            dispatch_suspend(syncQueue);
-            
-            // This means that opening the opened document causes no problem?
-            [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
-                if (success) {
-                    dispatch_async(syncQueue, ^{
-                        [self setupFetchedResultsController];
-                    });
-                } else {
-                    NSLog(@"Could not open document at %@", self.photoDatabase.fileURL);
-                }
-                dispatch_resume(syncQueue);
-            }];
-        });
     } else if (self.photoDatabase.documentState == UIDocumentStateNormal) {
         // already open and ready to use
         [self setupFetchedResultsController];
     }
+    dispatch_release(syncQueue);
 }
 
 #else //#ifdef __THREAD_RACE_GAUDE__
@@ -147,17 +151,29 @@
         // does not exist on disk, so create it
         [self.photoDatabase saveToURL:self.photoDatabase.fileURL forSaveOperation:UIDocumentSaveForCreating completionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
-            [self fetchFlickrDataIntoDocument:self.photoDatabase];
-            
+            [self fetchFlickrDataIntoDocument:self.photoDatabase usingBlock:^(BOOL success){
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    self.navigationItem.rightBarButtonItem = nil;
+                });
+            }];
         }];
     } else if (self.photoDatabase.documentState == UIDocumentStateClosed) {
         // exists on disk, but we need to open it
         [self.photoDatabase openWithCompletionHandler:^(BOOL success) {
             [self setupFetchedResultsController];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.navigationItem.rightBarButtonItem = nil;
+                [self.tableView reloadData];
+            });
         }];
     } else if (self.photoDatabase.documentState == UIDocumentStateNormal) {
         // already open and ready to use
         [self setupFetchedResultsController];
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.navigationItem.rightBarButtonItem = nil;
+        });
     }
 }
 
@@ -174,6 +190,22 @@
         // race condition test
         [self useDocument];
         // [self useDocument];
+        
+        // Shutterbug/FlickrPhotoTableViewController.m
+        UIActivityIndicatorView *spinner = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        [spinner startAnimating];
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:spinner];
+        
+        // dispatch_queue_t downloadQueue = dispatch_queue_create("flickr downloader", NULL);
+        // dispatch_async(downloadQueue, ^{
+        //     NSArray *photos = [FlickrFetcher recentGeoreferencedPhotos];
+        //     dispatch_async(dispatch_get_main_queue(), ^{
+        //         self.navigationItem.rightBarButtonItem = sender;
+        //         self.photos = photos;
+        //     });
+        // });
+        // dispatch_release(downloadQueue);
+        
     }
 }
 

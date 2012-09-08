@@ -56,7 +56,8 @@
     Photo *photo = [self.fetchedResultsController objectAtIndexPath:indexPath]; // ask NSFRC for the NSMO at the row in question
     cell.textLabel.text = photo.title;
     cell.detailTextLabel.text = photo.subtitle;
-    
+    cell.imageView.image = [UIImage imageWithData:photo.thumbnail];
+        
     return cell;
 }
 
